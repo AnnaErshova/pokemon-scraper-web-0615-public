@@ -21,7 +21,8 @@ class Scraper
   def hydrate_and_save_pokemons
     @pokemons.collect do |pokemon|
       @name = pokemon.css("a.ent-name").text
-      @type = pokemon.css("small.aside a").first.text
+      @type = pokemon.css("small.aside a").text
+      # binding.pry
       Pokemon.save(@name, @type, @db)
     end
   end # end hydrate_pokemons
