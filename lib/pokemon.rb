@@ -1,5 +1,3 @@
-require 'nokogiri'
-require 'open-uri'
 require 'pry'
 
 class Pokemon
@@ -14,8 +12,8 @@ class Pokemon
   # class methods 
 
   def self.find(id, db)
-    stats = @db.execute("SELECT name, type FROM pokemon WHERE id = ?;").flatten
-    Pokemon.new(@db, stats[0], stats[1])
+    pokemon_details = db.execute("SELECT name, type, hp FROM pokemon WHERE id = ?;", id).flatten
+    Pokemon.new(db, pokemon_details[0], pokemon_details[1], pokemon_details[2])
   end
 
   def self.save(name, type, db)
@@ -25,8 +23,8 @@ class Pokemon
 
   def alter_hp(hp) #id = row number effectively
     sql = "UPDATE pokemon SET hp=? WHERE name=?"
-    @db.execute(sql, @hp, @name) 
-  end
-end # end class
+    @db.execute(sql, hp, @name) 
+    @hp = hp
+  end # alter_hp
 
-# pokemons should themselves save information about them to the database
+end # end class
